@@ -1,0 +1,10 @@
+{
+  "full_name": "Test User",
+  "email": "you@example.com",
+  "phone": "",
+  "reason": "Demo",
+  "start_iso": "2025-09-30T18:00:00.000Z",
+  "duration_min": 30,
+  "notes": "website"
+}
+

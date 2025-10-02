@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UTM URL Generator - Answerly by Varyon</title>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f8fafc;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #1e40af;
+            margin-bottom: 30px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+            color: #374151;
+        }
+        input, select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+        .generated-url {
+            background: #f3f4f6;
+            padding: 15px;
+            border-radius: 6px;
+            margin-top: 20px;
+            word-break: break-all;
+            font-family: monospace;
+        }
+        .copy-btn {
+            background: #1e40af;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        .examples {
+            margin-top: 30px;
+            padding: 20px;
+            background: #f8fafc;
+            border-radius: 6px;
+        }
+        .example {
+            margin-bottom: 15px;
+            padding: 10px;
+            background: white;
+            border-radius: 4px;
+            border-left: 4px solid #1e40af;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>UTM URL Generator for Answerly</h1>
+        
+        <div class="form-group">
+            <label for="baseUrl">Base URL:</label>
+            <input type="text" id="baseUrl" value="https://answerly.com" readonly>
+        </div>
+        
+        <div class="form-group">
+            <label for="source">Source (utm_source):</label>
+            <select id="source">
+                <option value="linkedin">LinkedIn</option>
+                <option value="google">Google</option>
+                <option value="facebook">Facebook</option>
+                <option value="twitter">Twitter</option>
+                <option value="direct">Direct</option>
+            </select>
+        </div>
+        
+        <div class="form-group">
+            <label for="medium">Medium (utm_medium):</label>
+            <select id="medium">
+                <option value="social">Social Post</option>
+                <option value="cpc">Paid Ad (CPC)</option>
+                <option value="cpm">Paid Ad (CPM)</option>
+                <option value="email">Email</option>
+                <option value="referral">Referral</option>
+            </select>
+        </div>
+        
+        <div class="form-group">
+            <label for="campaign">Campaign (utm_campaign):</label>
+            <input type="text" id="campaign" placeholder="e.g., ai_voice_agent_post, save_20k_ads">
+        </div>
+        
+        <div class="form-group">
+            <label for="content">Content (utm_content):</label>
+            <input type="text" id="content" placeholder="e.g., never_miss_calls, hero_banner, cta_button">
+        </div>
+        
+        <div class="form-group">
+            <label for="term">Term (utm_term):</label>
+            <input type="text" id="term" placeholder="e.g., healthcare_clinics, medical_receptionist">
+        </div>
+        
+        <div class="generated-url" id="generatedUrl">
+            Generated URL will appear here...
+        </div>
+        
+        <button class="copy-btn" onclick="copyUrl()">Copy URL</button>
+        
+        <div class="examples">
+            <h3>Example Campaigns:</h3>
+            
+            <div class="example">
+                <strong>LinkedIn Post - AI Voice Agent:</strong><br>
+                Source: LinkedIn | Medium: Social | Campaign: ai_voice_agent_post | Content: never_miss_calls | Term: healthcare_clinics
+            </div>
+            
+            <div class="example">
+                <strong>LinkedIn Ad - Revenue Calculator:</strong><br>
+                Source: LinkedIn | Medium: CPC | Campaign: save_20k_ads | Content: hero_banner | Term: medical_receptionist
+            </div>
+            
+            <div class="example">
+                <strong>LinkedIn Ad - Demo Booking:</strong><br>
+                Source: LinkedIn | Medium: CPC | Campaign: demo_booking_conversion | Content: cta_button | Term: ai_receptionist
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function generateUrl() {
+            const baseUrl = document.getElementById('baseUrl').value;
+            const source = document.getElementById('source').value;
+            const medium = document.getElementById('medium').value;
+            const campaign = document.getElementById('campaign').value;
+            const content = document.getElementById('content').value;
+            const term = document.getElementById('term').value;
+            
+            const params = new URLSearchParams();
+            params.set('utm_source', source);
+            params.set('utm_medium', medium);
+            if (campaign) params.set('utm_campaign', campaign);
+            if (content) params.set('utm_content', content);
+            if (term) params.set('utm_term', term);
+            
+            const url = `${baseUrl}?${params.toString()}`;
+            document.getElementById('generatedUrl').textContent = url;
+        }
+        
+        function copyUrl() {
+            const url = document.getElementById('generatedUrl').textContent;
+            navigator.clipboard.writeText(url).then(() => {
+                alert('URL copied to clipboard!');
+            });
+        }
+        
+        // Generate URL on input change
+        document.addEventListener('DOMContentLoaded', function() {
+            const inputs = ['source', 'medium', 'campaign', 'content', 'term'];
+            inputs.forEach(id => {
+                document.getElementById(id).addEventListener('input', generateUrl);
+                document.getElementById(id).addEventListener('change', generateUrl);
+            });
+            generateUrl(); // Initial generation
+        });
+    </script>
+</body>
+</html>
+
+
+

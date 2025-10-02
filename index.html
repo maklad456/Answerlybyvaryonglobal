@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Answerly by Varyon - AI Voice Agent for Medical Clinics</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- ElevenLabs ConvAI Widget -->
+    <script src="https://unpkg.com/@elevenlabs/convai-widget-embed" async type="text/javascript"></script>
+    
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-SW87CLRLZR"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-SW87CLRLZR');
+    </script>
+
+    <!-- LinkedIn Insight Tag -->
+    <script type="text/javascript">
+        _linkedin_partner_id = "8731793";
+        window._linkedin_data_partner_ids = window._linkedin_data_partner_ids || [];
+        window._linkedin_data_partner_ids.push(_linkedin_partner_id);
+    </script>
+    <script type="text/javascript">
+        (function(l) {
+            if (!l){window.lintrk = function(a,b){window.lintrk.q.push([a,b])};
+            window.lintrk.q=[]}
+            var s = document.getElementsByTagName("script")[0];
+            var b = document.createElement("script");
+            b.type = "text/javascript";b.async = true;
+            b.src = "https://snap.licdn.com/li.lms-analytics/insight.min.js";
+            s.parentNode.insertBefore(b, s);
+        })(window.lintrk);
+    </script>
+    <noscript>
+        <img height="1" width="1" style="display:none;" alt="" src="https://px.ads.linkedin.com/collect/?pid=8731793&fmt=gif" />
+    </noscript>
+
+    <!-- UTM Tracking Script -->
+    <script>
+        // UTM Parameter Tracking System
+        window.UTMTracker = {
+            // Capture UTM parameters from URL
+            captureUTM: function() {
+                const urlParams = new URLSearchParams(window.location.search);
+                const utmData = {
+                    source: urlParams.get('utm_source') || 'direct',
+                    medium: urlParams.get('utm_medium') || 'none',
+                    campaign: urlParams.get('utm_campaign') || 'none',
+                    content: urlParams.get('utm_content') || 'none',
+                    term: urlParams.get('utm_term') || 'none',
+                    timestamp: new Date().toISOString(),
+                    page: window.location.pathname
+                };
+                
+                // Store in sessionStorage for persistence across page loads
+                sessionStorage.setItem('utm_data', JSON.stringify(utmData));
+                
+                // Store in localStorage for longer-term tracking
+                localStorage.setItem('utm_data', JSON.stringify(utmData));
+                
+                console.log('UTM Data Captured:', utmData);
+                return utmData;
+            },
+            
+            // Get stored UTM data
+            getUTMData: function() {
+                const stored = sessionStorage.getItem('utm_data');
+                return stored ? JSON.parse(stored) : null;
+            },
+            
+            // Track conversion events with UTM data
+            trackConversion: function(eventName, additionalData = {}) {
+                const utmData = this.getUTMData();
+                const conversionData = {
+                    event: eventName,
+                    utm: utmData,
+                    timestamp: new Date().toISOString(),
+                    url: window.location.href,
+                    ...additionalData
+                };
+                
+                // Store conversion for analytics
+                const conversions = JSON.parse(localStorage.getItem('conversions') || '[]');
+                conversions.push(conversionData);
+                localStorage.setItem('conversions', JSON.stringify(conversions));
+                
+                console.log('Conversion Tracked:', conversionData);
+                
+                // Send to analytics platforms
+                this.sendToAnalytics(conversionData);
+            },
+            
+            // Send data to analytics platforms
+            sendToAnalytics: function(data) {
+                // Google Analytics 4 (now implemented!)
+                if (typeof gtag !== 'undefined') {
+                    gtag('event', data.event, {
+                        'campaign_source': data.utm?.source,
+                        'campaign_medium': data.utm?.medium,
+                        'campaign_name': data.utm?.campaign,
+                        'campaign_content': data.utm?.content,
+                        'campaign_term': data.utm?.term,
+                        'value': data.conversion_value || 0
+                    });
+                }
+                
+                // LinkedIn Insight Tag (now implemented!)
+                if (typeof window.lintrk !== 'undefined') {
+                    // Send conversion event to LinkedIn
+                    window.lintrk('track', {
+                        conversion_id: data.event,
+                        conversion_value: data.conversion_value || 0,
+                        currency: 'USD',
+                        utm_source: data.utm?.source,
+                        utm_medium: data.utm?.medium,
+                        utm_campaign: data.utm?.campaign,
+                        utm_content: data.utm?.content,
+                        utm_term: data.utm?.term
+                    });
+                }
+                
+                // Microsoft Clarity (will be implemented)
+                if (typeof clarity !== 'undefined') {
+                    clarity('set', 'utm_source', data.utm?.source);
+                    clarity('set', 'utm_campaign', data.utm?.campaign);
+                }
+            },
+            
+            // Generate UTM tracking URLs for campaigns
+            generateUTMUrl: function(baseUrl, source, medium, campaign, content = '', term = '') {
+                const params = new URLSearchParams();
+                params.set('utm_source', source);
+                params.set('utm_medium', medium);
+                params.set('utm_campaign', campaign);
+                if (content) params.set('utm_content', content);
+                if (term) params.set('utm_term', term);
+                
+                return `${baseUrl}?${params.toString()}`;
+            }
+        };
+        
+        // Initialize UTM tracking on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            window.UTMTracker.captureUTM();
+            
+            // Track page view with UTM data
+            if (typeof gtag !== 'undefined') {
+                const utmData = window.UTMTracker.getUTMData();
+                if (utmData) {
+                    gtag('event', 'page_view', {
+                        'campaign_source': utmData.source,
+                        'campaign_medium': utmData.medium,
+                        'campaign_name': utmData.campaign,
+                        'campaign_content': utmData.content,
+                        'campaign_term': utmData.term
+                    });
+                }
+            }
+        });
+    </script>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <img src="logo.svg" alt="Answerly by Varyon" class="logo">
+            </div>
+            <div class="nav-menu">
+                <a href="#pricing" class="nav-link">Pricing</a>
+                <a href="#contact" class="nav-link">Contact</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-video-background">
+            <video autoplay muted loop playsinline>
+                <source src="media/29e867cc-c8b6-4b98-b102-51c34049ee1a.mp4" type="video/mp4">
+            </video>
+            <div class="hero-overlay"></div>
+        </div>
+        <div class="hero-container">
+            <div class="hero-content">
+                <h1 class="hero-title">Never Miss a Patient Call Again.</h1>
+                <p class="hero-subtitle">Our AI Voice Agent answers 100% of calls, books appointments, and increases your revenue — with no sick days or weekends off.</p>
+                <div class="hero-cta">
+                    <button class="cta-button primary" id="bookDemoBtnHero">Book a Demo</button>
+                    <button class="cta-button secondary" id="watchDemoBtn">Watch Demo</button>
+                    <button class="cta-button accent" id="tryAgentBtn">Try AI Agent</button>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <!-- Visual handled by video background -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Statistics Section -->
+    <section class="stats">
+        <div class="container">
+            <h2 class="section-title">The Hidden Cost of Missed Calls</h2>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-phone-slash"></i>
+                    </div>
+                    <div class="stat-number">30-40%</div>
+                    <div class="stat-text">of calls are missed by clinics</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-dollar-sign"></i>
+                    </div>
+                    <div class="stat-number">$150-300</div>
+                    <div class="stat-text">lost per missed call</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-user-tie"></i>
+                    </div>
+                    <div class="stat-number">$20-35K</div>
+                    <div class="stat-text">annual cost of receptionist</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Benefits Section -->
+    <section class="benefits">
+        <div class="container">
+            <h2 class="section-title">Why Choose Our AI Voice Agent?</h2>
+            <div class="benefits-grid">
+                <div class="benefit-card">
+                    <div class="benefit-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <h3>Always Available</h3>
+                    <p>Works after hours, weekends, and holidays. Never takes a sick day.</p>
+                </div>
+                <div class="benefit-card">
+                    <div class="benefit-icon">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                    <h3>Smarter</h3>
+                    <p>Checks schedules, fetches patient data, and answers FAQs instantly.</p>
+                </div>
+                <div class="benefit-card">
+                    <div class="benefit-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h3>Revenue Generator</h3>
+                    <p>Captures every call and books patients automatically.</p>
+                </div>
+                <div class="benefit-card">
+                    <div class="benefit-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3>Reliable</h3>
+                    <p>No sick days, no turnover, consistent performance 24/7.</p>
+                </div>
+            </div>
+            <div class="benefits-cta">
+                <button class="cta-button primary">Try the Voice Agent</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Revenue Calculator -->
+    <section class="calculator">
+        <div class="container">
+            <h2 class="section-title">See How Much Revenue You're Losing</h2>
+            <div class="calculator-content">
+                <div class="calculator-form">
+                    <div class="form-group">
+                        <label>Average calls per week</label>
+                        <input type="number" id="callsPerWeek" value="10" min="1">
+                    </div>
+                    <div class="form-group">
+                        <label>Missed call percentage</label>
+                        <input type="number" id="missedPercentage" value="35" min="1" max="100">
+                    </div>
+                    <div class="form-group">
+                        <label>Average revenue per call</label>
+                        <input type="number" id="revenuePerCall" value="200" min="1">
+                    </div>
+                </div>
+                <div class="calculator-result">
+                    <div class="result-card">
+                        <h3>Annual Lost Revenue</h3>
+                        <div class="result-amount" id="lostRevenue">$36,400</div>
+                        <p>Our AI agent recovers this instantly</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Trust Section -->
+    <section class="trust">
+        <div class="container">
+            <h2 class="section-title">Trusted by Healthcare Professionals</h2>
+            <div class="testimonial">
+                <div class="testimonial-content">
+                    <p>"We used to lose 1 in 3 calls. Now every call is answered and our schedule is always full. Answerly has transformed our practice."</p>
+                    <div class="testimonial-author">
+                        <strong>Dr. Sarah Johnson</strong>
+                        <span>Family Medicine Practice</span>
+                    </div>
+                </div>
+            </div>
+            <div class="trust-badges">
+                <div class="trust-badge">
+                    <i class="fas fa-shield-check"></i>
+                    <span>HIPAA Compliant</span>
+                </div>
+                <div class="trust-badge">
+                    <i class="fas fa-lock"></i>
+                    <span>Secure & Private</span>
+                </div>
+                <div class="trust-badge">
+                    <i class="fas fa-certificate"></i>
+                    <span>Healthcare Certified</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Comparison -->
+    <section class="pricing" id="pricing">
+        <div class="container">
+            <h2 class="section-title">Cost Comparison</h2>
+            <div class="pricing-grid">
+                <div class="pricing-card human">
+                    <h3>Human Receptionist</h3>
+                    <div class="price">$20,000+</div>
+                    <div class="price-period">per year</div>
+                    <ul class="pricing-features">
+                        <li><i class="fas fa-times"></i> Limited hours</li>
+                        <li><i class="fas fa-times"></i> Sick days</li>
+                        <li><i class="fas fa-times"></i> Training costs</li>
+                        <li><i class="fas fa-times"></i> Turnover risk</li>
+                    </ul>
+                </div>
+                <div class="pricing-card ai featured">
+                    <div class="featured-badge">Recommended</div>
+                    <h3>AI Voice Agent</h3>
+                    <div class="price">$299</div>
+                    <div class="price-period">per month</div>
+                    <ul class="pricing-features">
+                        <li><i class="fas fa-check"></i> 24/7 availability</li>
+                        <li><i class="fas fa-check"></i> No sick days</li>
+                        <li><i class="fas fa-check"></i> Instant setup</li>
+                        <li><i class="fas fa-check"></i> Always improving</li>
+                    </ul>
+                    <div class="savings">Pays for itself after 2-3 saved calls per week</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Final CTA -->
+    <section class="final-cta">
+        <div class="container">
+            <h2 class="cta-title">Your Patients Deserve to Be Heard — Every Time</h2>
+            <p class="cta-subtitle">Join hundreds of clinics already using Answerly to never miss another call</p>
+            <div class="cta-buttons">
+                <button class="cta-button primary large" id="bookDemoBtnFinal">Book a Demo</button>
+                <button class="cta-button accent large" id="tryAgentBtnFinal">Try AI Agent</button>
+                <button class="cta-button secondary large">Contact Us</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <img src="logo.svg" alt="Answerly by Varyon">
+                </div>
+                <div class="footer-links">
+                    <a href="#privacy">Privacy Policy</a>
+                    <a href="#terms">Terms of Service</a>
+                    <a href="#contact">Contact Us</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 Answerly by Varyon. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Video Modal -->
+    <div id="videoModal" class="video-modal" style="display:none;">
+        <div class="video-modal-content">
+            <span class="video-close" aria-label="Close">&times;</span>
+            <video id="demoVideo" controls>
+                <source src="media/0922(1).mp4" type="video/mp4">
+            </video>
+        </div>
+    </div>
+
+    <!-- Booking Modal -->
+    <div id="bookingModal" class="booking-modal" style="display:none;">
+        <div class="booking-modal-content">
+            <div class="booking-header">
+                <h3>Book a Demo</h3>
+                <button class="booking-back" id="bookingBack" aria-label="Back" style="display:none;">&larr; Back</button>
+                <button class="booking-close" aria-label="Close">&times;</button>
+            </div>
+            <div class="booking-body">
+                <div class="booking-status">Loading available slots...</div>
+                <div class="date-list" id="dateList"></div>
+                <div class="time-list" id="timeList"></div>
+                <form class="booking-form" id="bookingForm" style="display:none;">
+                    <p class="cta-text">Are you ready to save at least $20,000? Book a 30-minute call.</p>
+                    <div class="form-group">
+                        <label for="bfName">Your Name</label>
+                        <input type="text" id="bfName" placeholder="Full name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="bfEmail">Your Email</label>
+                        <input type="email" id="bfEmail" placeholder="your@example.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="bfPhone">Your Phone Number</label>
+                        <input type="tel" id="bfPhone" placeholder="+15551234567">
+                    </div>
+                    <div class="form-group">
+                        <label for="bfSource">How did you hear about us?</label>
+                        <input type="text" id="bfSource" placeholder="e.g., Google, LinkedIn, Referral">
+                    </div>
+                    <button class="cta-button primary large" type="submit" id="confirmBookingBtn">Confirm Booking</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
+
+
