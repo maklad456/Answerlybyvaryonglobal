@@ -824,16 +824,8 @@ app.post('/google/book', async (req, res) => {
             dateTime: endTime.toISOString(),
             timeZone: BOOKING_TZ || 'America/Los_Angeles',
           },
-          // Note: Not adding attendees because service account requires Domain-Wide Delegation
+          // Note: Not adding attendees or conference data because service account requires additional permissions
           // The EmailJS integration will handle sending notifications to the attendee
-          conferenceData: {
-            createRequest: {
-              requestId: `answerly-${Date.now()}`,
-              conferenceSolutionKey: {
-                type: 'hangoutsMeet',
-              },
-            },
-          },
           reminders: {
             useDefault: false,
             overrides: [
@@ -846,10 +838,9 @@ app.post('/google/book', async (req, res) => {
         const response = await googleCalendar.events.insert({
           calendarId: GOOGLE_CALENDAR_ID,
           resource: event,
-          conferenceDataVersion: 1,
         });
 
-        meetingLink = response.data.conferenceData?.entryPoints?.[0]?.uri || '';
+        meetingLink = ''; // No meeting link without conference data
         calendarLink = response.data.htmlLink || '';
 
         console.log(`Google Calendar event created via /google/book: ${response.data.id}`);
