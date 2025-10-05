@@ -784,6 +784,124 @@ app.post('/api/book', async (req, res) => {
   }
 });
 
+// Google Calendar booking endpoint (same as /api/book but at /google/book for compatibility)
+app.post('/google/book', async (req, res) => {
+  try {
+    const { full_name, email, phone, reason, start_iso, duration_min = 30, notes } = req.body;
+
+    // Validate required fields
+    if (!full_name || !email || !start_iso) {
+      return res.status(400).json({
+        error: 'Missing required fields',
+        message: 'full_name, email, and start_iso are required'
+      });
+    }
+
+    const startTime = new Date(start_iso);
+    const endTime = new Date(startTime.getTime() + (duration_min * 60000));
+
+    if (isNaN(startTime.getTime()) || isNaN(endTime.getTime())) {
+      return res.status(400).json({
+        error: 'Invalid date format',
+        message: 'start_iso must be a valid ISO 8601 datetime'
+      });
+    }
+
+    let meetingLink = '';
+    let calendarLink = '';
+
+    // Create Google Calendar event if configured
+    if (googleCalendar) {
+      try {
+        const event = {
+          summary: `Answerly Demo - ${full_name}`,
+          description: `Demo consultation with ${full_name}\nReason: ${reason || 'AI receptionist consultation'}\nPhone: ${phone || 'Not provided'}\nNotes: ${notes || 'None'}`,
+          start: {
+            dateTime: startTime.toISOString(),
+            timeZone: BOOKING_TZ || 'America/Los_Angeles',
+          },
+          end: {
+            dateTime: endTime.toISOString(),
+            timeZone: BOOKING_TZ || 'America/Los_Angeles',
+          },
+          attendees: [
+            {
+              email: email,
+              displayName: full_name,
+            },
+            {
+              email: BOOKING_EMAIL || 'info@varyonglobal.com',
+              displayName: 'Answerly by Varyon',
+            },
+          ],
+          conferenceData: {
+            createRequest: {
+              requestId: `answerly-${Date.now()}`,
+              conferenceSolutionKey: {
+                type: 'hangoutsMeet',
+              },
+            },
+          },
+          reminders: {
+            useDefault: false,
+            overrides: [
+              { method: 'email', minutes: 24 * 60 },
+              { method: 'popup', minutes: 10 },
+            ],
+          },
+        };
+
+        const response = await googleCalendar.events.insert({
+          calendarId: GOOGLE_CALENDAR_ID,
+          resource: event,
+          conferenceDataVersion: 1,
+        });
+
+        meetingLink = response.data.conferenceData?.entryPoints?.[0]?.uri || '';
+        calendarLink = response.data.htmlLink || '';
+
+        console.log(`Google Calendar event created via /google/book: ${response.data.id}`);
+      } catch (error) {
+        console.error('Failed to create Google Calendar event:', error);
+        return res.status(500).json({
+          error: 'calendar_booking_failed',
+          message: error.message || 'Failed to create calendar event'
+        });
+      }
+    } else {
+      return res.status(500).json({
+        error: 'calendar_not_configured',
+        message: 'Google Calendar integration is not available'
+      });
+    }
+
+    // Format response
+    const response = {
+      success: true,
+      join_url: meetingLink,
+      meeting_link: meetingLink,
+      calendar_link: calendarLink,
+      start_time: startTime.toISOString(),
+      end_time: endTime.toISOString(),
+      subject: `Answerly Demo - ${full_name}`,
+      message: `Meeting booked successfully for ${full_name}`,
+      attendee_email: email,
+      attendee_name: full_name,
+    };
+
+    console.log('Website booking completed via /google/book:', response);
+    res.json(response);
+
+  } catch (error) {
+    console.error('Website booking error:', error);
+    res.status(500).json({
+      error: 'booking_failed',
+      message: error.message || 'Failed to create meeting',
+      details: error.toString()
+    });
+  }
+});
+
 // Google Calendar availability endpoint for ElevenLabs (public endpoint - no auth required)
 app.get('/google/freebusy', async (req, res) => {
   try {
