@@ -815,7 +815,7 @@ app.post('/google/book', async (req, res) => {
       try {
         const event = {
           summary: `Answerly Demo - ${full_name}`,
-          description: `Demo consultation with ${full_name}\nReason: ${reason || 'AI receptionist consultation'}\nPhone: ${phone || 'Not provided'}\nNotes: ${notes || 'None'}`,
+          description: `Demo consultation with ${full_name}\nEmail: ${email}\nPhone: ${phone || 'Not provided'}\nReason: ${reason || 'AI receptionist consultation'}\nNotes: ${notes || 'None'}\n\nPlease manually send calendar invite to: ${email}`,
           start: {
             dateTime: startTime.toISOString(),
             timeZone: BOOKING_TZ || 'America/Los_Angeles',
@@ -824,16 +824,8 @@ app.post('/google/book', async (req, res) => {
             dateTime: endTime.toISOString(),
             timeZone: BOOKING_TZ || 'America/Los_Angeles',
           },
-          attendees: [
-            {
-              email: email,
-              displayName: full_name,
-            },
-            {
-              email: BOOKING_EMAIL || 'info@varyonglobal.com',
-              displayName: 'Answerly by Varyon',
-            },
-          ],
+          // Note: Not adding attendees because service account requires Domain-Wide Delegation
+          // The EmailJS integration will handle sending notifications to the attendee
           conferenceData: {
             createRequest: {
               requestId: `answerly-${Date.now()}`,
