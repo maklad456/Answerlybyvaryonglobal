@@ -474,9 +474,24 @@ function initializeGoogleAuth() {
   }
 
   try {
+    // Clean up the private key - handle various formats
+    let privateKey = GOOGLE_PRIVATE_KEY;
+    
+    // Remove quotes if present
+    privateKey = privateKey.replace(/^["']|["']$/g, '');
+    
+    // Replace escaped newlines with actual newlines
+    privateKey = privateKey.replace(/\\n/g, '\n');
+    
+    // Ensure proper formatting
+    if (!privateKey.includes('\n')) {
+      // If no newlines at all, it might be a single-line format
+      console.error('Private key appears to be in wrong format (no newlines)');
+    }
+    
     const credentials = {
       client_email: GOOGLE_SERVICE_ACCOUNT_EMAIL,
-      private_key: GOOGLE_PRIVATE_KEY.replace(/\\n/g, '\n'),
+      private_key: privateKey,
     };
 
     googleAuth = new google.auth.GoogleAuth({
@@ -489,6 +504,8 @@ function initializeGoogleAuth() {
     return true;
   } catch (error) {
     console.error('Failed to initialize Google Calendar:', error);
+    console.error('Private key length:', GOOGLE_PRIVATE_KEY?.length);
+    console.error('Has newlines:', GOOGLE_PRIVATE_KEY?.includes('\\n') || GOOGLE_PRIVATE_KEY?.includes('\n'));
     return false;
   }
 }

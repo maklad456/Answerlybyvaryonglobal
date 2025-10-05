@@ -1,0 +1,21 @@
+[build]
+  publish = "."
+
+# Proxy backend API calls to Render (must come BEFORE catch-all)
+[[redirects]]
+  from = "/api/*"
+  to = "https://answerlybyvaryonglobal.onrender.com/api/:splat"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/google/*"
+  to = "https://answerlybyvaryonglobal.onrender.com/google/:splat"
+  status = 200
+  force = true
+
+# SPA fallback (must come LAST)
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
