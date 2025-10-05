@@ -1,9 +1,0 @@
-[build]
-  # Static site at repo root
-  publish = "."
-
-# SPA fallback so refreshes/deep links work
-[[redirects]]
-  from = "/*"
-  to = "/index.html"
-  status = 200
