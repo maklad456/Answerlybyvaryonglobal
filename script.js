@@ -519,6 +519,14 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Voice Agent Modal
     function showVoiceAgentModal() {
+        // Check if ElevenLabs widget script is loaded
+        if (typeof customElements === 'undefined' || !customElements.get('elevenlabs-convai')) {
+            console.error('ElevenLabs widget not loaded yet. Retrying...');
+            // Retry after a short delay
+            setTimeout(showVoiceAgentModal, 500);
+            return;
+        }
+        
         // Create modal if it doesn't exist
         let voiceModal = document.getElementById('voiceAgentModal');
         if (!voiceModal) {
@@ -552,6 +560,8 @@ document.addEventListener('DOMContentLoaded', function() {
         
         voiceModal.style.display = 'flex';
         document.body.style.overflow = 'hidden';
+        
+        console.log('ElevenLabs voice agent modal opened with agent ID: agent_2101k60sp5xafpbsvrx43354evzw');
     }
 });
 
