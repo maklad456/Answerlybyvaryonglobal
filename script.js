@@ -536,7 +536,7 @@ document.addEventListener('DOMContentLoaded', function() {
             voiceModal.innerHTML = `
                 <div class="voice-agent-content">
                     <button class="voice-agent-close" aria-label="Close">&times;</button>
-                    <elevenlabs-convai agent-id="agent_2101k60sp5xafpbsvrx43354evzw"></elevenlabs-convai>
+                    <elevenlabs-convai agent-id="agent_4001k6x3bfbfewpa2m1bavjcedqh"></elevenlabs-convai>
                 </div>
             `;
             document.body.appendChild(voiceModal);
@@ -561,7 +561,7 @@ document.addEventListener('DOMContentLoaded', function() {
         voiceModal.style.display = 'flex';
         document.body.style.overflow = 'hidden';
         
-        console.log('ElevenLabs voice agent modal opened with agent ID: agent_2101k60sp5xafpbsvrx43354evzw');
+        console.log('ElevenLabs voice agent modal opened with agent ID: agent_4001k6x3bfbfewpa2m1bavjcedqh');
     }
 });
 
