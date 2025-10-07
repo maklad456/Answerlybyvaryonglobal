@@ -173,7 +173,7 @@
             </div>
             <div class="nav-menu">
                 <a href="#pricing" class="nav-link">Pricing</a>
-                <a href="#contact" class="nav-link">Contact</a>
+                <a href="#" class="nav-link" id="contactUsBtnHeader">Contact Us</a>
             </div>
         </div>
     </nav>
@@ -373,7 +373,7 @@
             <div class="cta-buttons">
                 <button class="cta-button primary large" id="bookDemoBtnFinal">Book a Demo</button>
                 <button class="cta-button accent large" id="tryAgentBtnFinal">Try AI Agent</button>
-                <button class="cta-button secondary large">Contact Us</button>
+                <button class="cta-button secondary large" id="contactUsBtnHero">Contact Us</button>
             </div>
         </div>
     </section>
@@ -388,7 +388,7 @@
                 <div class="footer-links">
                     <a href="/privacy-policy.html">Privacy Policy</a>
                     <a href="/terms-of-service.html">Terms of Service</a>
-                    <a href="#contact">Contact Us</a>
+                    <a href="#" id="contactUsBtn">Contact Us</a>
                 </div>
             </div>
             <div class="footer-bottom">
@@ -439,6 +439,67 @@
                     </div>
                     <button class="cta-button primary large" type="submit" id="confirmBookingBtn">Confirm Booking</button>
                 </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contact Modal -->
+    <div id="contactModal" class="contact-modal" style="display: none;">
+        <div class="contact-modal-content">
+            <button class="contact-modal-close" aria-label="Close">&times;</button>
+            <div class="contact-modal-header">
+                <h2>Contact Information</h2>
+                <p>Get in touch with us through any of these channels</p>
+            </div>
+            <div class="contact-modal-body">
+                <div class="contact-item">
+                    <i class="fas fa-envelope"></i>
+                    <div class="contact-details">
+                        <h3>Email</h3>
+                        <a href="mailto:info@varyonglobal.com?subject=Inquiry from Answerly Website" class="contact-link email-link">
+                            info@varyonglobal.com
+                        </a>
+                        <p class="contact-description">Send us an email for general inquiries</p>
+                    </div>
+                </div>
+                
+                <div class="contact-item">
+                    <i class="fab fa-whatsapp"></i>
+                    <div class="contact-details">
+                        <h3>WhatsApp</h3>
+                        <div class="phone-numbers">
+                            <a href="https://wa.me/2001116001400" class="contact-link whatsapp-link" target="_blank">
+                                <i class="fas fa-phone"></i> +2001116001400
+                            </a>
+                            <a href="https://wa.me/491706083757" class="contact-link whatsapp-link" target="_blank">
+                                <i class="fas fa-phone"></i> +49 170 6083757
+                            </a>
+                        </div>
+                        <p class="contact-description">Chat with us on WhatsApp</p>
+                    </div>
+                </div>
+                
+                <div class="contact-item">
+                    <i class="fab fa-instagram"></i>
+                    <div class="contact-details">
+                        <h3>Instagram</h3>
+                        <a href="https://www.instagram.com/varyonglobal?igsh=dWd0bjV4MG9pZWM3" class="contact-link instagram-link" target="_blank">
+                            @varyonglobal
+                        </a>
+                        <p class="contact-description">Follow us for updates and insights</p>
+                    </div>
+                </div>
+                
+                <div class="contact-item">
+                    <i class="fas fa-globe"></i>
+                    <div class="contact-details">
+                        <h3>Website</h3>
+                        <a href="https://varyonglobal.com" class="contact-link website-link" target="_blank">
+                            varyonglobal.com
+                        </a>
+                        <p class="contact-description">Visit our parent company website</p>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

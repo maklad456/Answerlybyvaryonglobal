@@ -563,6 +563,74 @@ document.addEventListener('DOMContentLoaded', function() {
         
         console.log('ElevenLabs voice agent modal opened with agent ID: agent_4001k6x3bfbfewpa2m1bavjcedqh');
     }
+    
+    // Contact Modal functionality
+    const contactUsBtn = document.getElementById('contactUsBtn');
+    const contactUsBtnHero = document.getElementById('contactUsBtnHero');
+    const contactUsBtnHeader = document.getElementById('contactUsBtnHeader');
+    const contactModal = document.getElementById('contactModal');
+    
+    function openContactModal(source) {
+        // Track contact modal opened with UTM data
+        if (window.UTMTracker) {
+            window.UTMTracker.trackConversion('contact_modal_opened', {
+                action: 'contact_us_clicked',
+                source: source,
+                conversion_value: 5000 // Estimated value of contact engagement
+            });
+        }
+        
+        contactModal.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+    }
+    
+    if (contactUsBtn && contactModal) {
+        contactUsBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            openContactModal('footer');
+        });
+    }
+    
+    if (contactUsBtnHero && contactModal) {
+        contactUsBtnHero.addEventListener('click', function(e) {
+            e.preventDefault();
+            openContactModal('hero');
+        });
+    }
+    
+    if (contactUsBtnHeader && contactModal) {
+        contactUsBtnHeader.addEventListener('click', function(e) {
+            e.preventDefault();
+            openContactModal('header');
+        });
+    }
+    
+    // Close contact modal functionality (shared for both buttons)
+    if (contactModal) {
+        const contactCloseBtn = contactModal.querySelector('.contact-modal-close');
+        if (contactCloseBtn) {
+            contactCloseBtn.addEventListener('click', function() {
+                contactModal.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            });
+        }
+        
+        // Close when clicking outside the modal
+        contactModal.addEventListener('click', function(e) {
+            if (e.target === contactModal) {
+                contactModal.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            }
+        });
+        
+        // Close with Escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && contactModal.style.display === 'flex') {
+                contactModal.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            }
+        });
+    }
 });
 
 // Seamless hero video playlist using double-buffer videos to avoid gap
