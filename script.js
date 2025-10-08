@@ -146,7 +146,6 @@ document.addEventListener('DOMContentLoaded', function() {
     // Fresh, minimal day picker logic per request
     const bookingModal = document.getElementById('bookingModal');
     const bookingClose = document.querySelector('.booking-close');
-    const bookingBack = document.getElementById('bookingBack');
     const bookDemoBtnHero = document.getElementById('bookDemoBtnHero');
     const bookDemoBtnFinal = document.getElementById('bookDemoBtnFinal');
     const bookDemoBtnPricing = document.getElementById('bookDemoBtnPricing');
@@ -259,7 +258,6 @@ document.addEventListener('DOMContentLoaded', function() {
         document.body.style.overflow = 'hidden';
         dateList.innerHTML = '';
         if (timeList) timeList.innerHTML = '';
-        if (bookingBack) bookingBack.style.display = 'none';
         bookingStatus.textContent = 'Loading available days...';
         
         // Fetch busy slots data
@@ -299,7 +297,6 @@ document.addEventListener('DOMContentLoaded', function() {
         
         if (bookingStatus) bookingStatus.textContent = 'Select a time (Pacific):';
         if (dateList) dateList.style.display = 'none';
-        if (bookingBack) bookingBack.style.display = 'inline-block';
         timeList.innerHTML = '';
         if (bookingForm) bookingForm.style.display = 'none';
 
@@ -463,12 +460,7 @@ document.addEventListener('DOMContentLoaded', function() {
         timeList.style.display = 'grid';
     }
 
-    if (bookingBack) bookingBack.onclick = () => {
-        if (timeList) timeList.innerHTML = '';
-        if (dateList) { dateList.style.display = 'grid'; }
-        bookingBack.style.display = 'none';
-        if (bookingStatus) bookingStatus.textContent = 'Select a day:';
-    };
+    // Back button functionality removed - users can close modal and reopen to start over
     if (bookDemoBtnHero) bookDemoBtnHero.addEventListener('click', openDayPicker);
     if (bookDemoBtnFinal) bookDemoBtnFinal.addEventListener('click', openDayPicker);
     if (bookDemoBtnPricing) bookDemoBtnPricing.addEventListener('click', openDayPicker);

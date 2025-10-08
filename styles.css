@@ -20,11 +20,38 @@
     box-sizing: border-box;
 }
 
+/* Prevent scaling on all interactive elements */
+button,
+a,
+input,
+select,
+textarea,
+[role="button"],
+[tabindex] {
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+}
+
+/* Ensure no scaling on active/focus states */
+button:active,
+a:active,
+input:active,
+select:active,
+textarea:active,
+[role="button"]:active,
+[tabindex]:active {
+    transform: none !important;
+    scale: none !important;
+}
+
 body {
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     line-height: 1.6;
     color: var(--text-dark);
     background-color: var(--white);
+    /* Prevent viewport zoom on mobile Safari */
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
 }
 
 .container {
@@ -94,6 +121,19 @@ body {
     transition: all 0.3s ease;
     position: relative;
     overflow: hidden;
+    /* Prevent any scaling on click/tap */
+    transform: none !important;
+    /* Prevent viewport zoom on mobile Safari */
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+}
+
+/* Ensure no scaling on any button state */
+.cta-button:active,
+.cta-button:focus,
+.cta-button:focus-visible {
+    transform: none !important;
+    scale: none !important;
 }
 
 .cta-button.primary {
@@ -103,8 +143,13 @@ body {
 }
 
 .cta-button.primary:hover {
-    transform: translateY(-2px);
     box-shadow: var(--shadow-lg);
+}
+
+.cta-button.primary:active,
+.cta-button.primary:focus {
+    outline: 2px solid var(--teal);
+    outline-offset: 2px;
 }
 
 .cta-button.secondary {
@@ -118,6 +163,12 @@ body {
     color: var(--white);
 }
 
+.cta-button.secondary:active,
+.cta-button.secondary:focus {
+    outline: 2px solid var(--primary-blue);
+    outline-offset: 2px;
+}
+
 .cta-button.accent {
     background: linear-gradient(135deg, var(--teal) 0%, var(--electric-blue) 100%);
     color: var(--white);
@@ -125,8 +176,13 @@ body {
 }
 
 .cta-button.accent:hover {
-    transform: translateY(-2px);
     box-shadow: var(--shadow-lg);
+}
+
+.cta-button.accent:active,
+.cta-button.accent:focus {
+    outline: 2px solid var(--electric-blue);
+    outline-offset: 2px;
 }
 
 .cta-button.large {
@@ -695,13 +751,14 @@ body {
 .video-modal {
     display: none;
     position: fixed;
-    z-index: 1000;
-    left: 0;
     top: 0;
+    left: 0;
     width: 100%;
     height: 100%;
     background-color: rgba(0, 0, 0, 0.8);
     backdrop-filter: blur(5px);
+    z-index: 1000;
+    /* Perfect centering */
     display: flex;
     align-items: center;
     justify-content: center;
@@ -710,13 +767,17 @@ body {
 
 .video-modal-content {
     position: relative;
-    margin: 0;
-    width: auto;
-    max-width: 90vw;
+    width: 100%;
+    max-width: 1200px;
+    height: auto;
     background: transparent;
-    border-radius: 0;
+    border-radius: 12px;
     overflow: hidden;
-    box-shadow: none;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+    /* Center the content */
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .video-close {
@@ -744,10 +805,12 @@ body {
 
 #demoVideo {
     display: block;
-    width: auto;
+    width: 100%;
     height: auto;
-    max-width: 90vw;
+    max-width: 100%;
     max-height: 80vh;
+    border-radius: 12px;
+    object-fit: contain;
 }
 
 /* Booking Modal */
@@ -764,23 +827,31 @@ body {
 }
 
 .booking-modal-content {
-    background: #fff;
+    background: var(--white);
     width: 90%;
-    max-width: 480px;
+    max-width: 600px;
     max-height: 85vh;
     border-radius: 12px;
-    box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+    box-shadow: var(--shadow-lg);
     overflow: hidden;
     display: flex;
     flex-direction: column;
+    /* Hide scrollbar but keep functionality */
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* Internet Explorer 10+ */
+}
+
+.booking-modal-content::-webkit-scrollbar {
+    display: none; /* WebKit */
 }
 
 .booking-header {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    padding: 16px 20px;
+    justify-content: center;
+    padding: 20px 60px 16px 20px;
     border-bottom: 1px solid #eef2f7;
+    position: relative;
 }
 
 .booking-header h3 {
@@ -789,10 +860,27 @@ body {
 }
 
 .booking-close {
-    background: transparent;
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    background: rgba(0, 0, 0, 0.5);
     border: none;
+    color: white;
     font-size: 24px;
+    font-weight: bold;
     cursor: pointer;
+    z-index: 1001;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.3s ease;
+}
+
+.booking-close:hover {
+    background: rgba(0, 0, 0, 0.8);
 }
 
 .booking-body {
@@ -800,6 +888,13 @@ body {
     flex: 1;
     overflow-y: auto;
     max-height: 70vh;
+    /* Hide scrollbar but keep functionality */
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* Internet Explorer 10+ */
+}
+
+.booking-body::-webkit-scrollbar {
+    display: none; /* WebKit */
 }
 
 .booking-status {
@@ -941,9 +1036,20 @@ body {
         grid-template-columns: 1fr;
     }
     
+    .video-modal {
+        padding: 10px;
+    }
+    
     .video-modal-content {
-        margin: 10% auto;
-        width: 95%;
+        width: 100%;
+        max-width: 100%;
+        margin: 0;
+        border-radius: 8px;
+    }
+    
+    #demoVideo {
+        max-height: 70vh;
+        border-radius: 8px;
     }
     
     .video-close {
@@ -952,6 +1058,30 @@ body {
         font-size: 24px;
         width: 35px;
         height: 35px;
+    }
+}
+
+/* Extra small screens (phones in portrait) */
+@media (max-width: 480px) {
+    .video-modal {
+        padding: 5px;
+    }
+    
+    .video-modal-content {
+        border-radius: 6px;
+    }
+    
+    #demoVideo {
+        max-height: 60vh;
+        border-radius: 6px;
+    }
+    
+    .video-close {
+        top: 8px;
+        right: 12px;
+        font-size: 20px;
+        width: 30px;
+        height: 30px;
     }
 }
 
@@ -978,5 +1108,227 @@ body {
     .phone-screen {
         width: 250px;
         height: 500px;
+    }
+}
+
+/* Contact Modal Styles */
+.contact-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    z-index: 2000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(5px);
+}
+
+.contact-modal-content {
+    background: var(--white);
+    border-radius: 12px;
+    max-width: 600px;
+    width: 90%;
+    max-height: 80vh;
+    overflow-y: auto;
+    position: relative;
+    box-shadow: var(--shadow-lg);
+    animation: contactModalSlideIn 0.3s ease-out;
+    /* Hide scrollbar but keep functionality */
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* Internet Explorer 10+ */
+}
+
+.contact-modal-content::-webkit-scrollbar {
+    display: none; /* WebKit */
+}
+
+@keyframes contactModalSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-30px) scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.contact-modal-close {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: none;
+    border: none;
+    font-size: 24px;
+    color: var(--text-light);
+    cursor: pointer;
+    z-index: 1;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+}
+
+.contact-modal-close:hover {
+    background-color: var(--light-gray);
+    color: var(--text-dark);
+}
+
+.contact-modal-header {
+    padding: 40px 40px 20px 40px;
+    text-align: center;
+    border-bottom: 1px solid var(--light-gray);
+}
+
+.contact-modal-header h2 {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--primary-blue);
+    margin-bottom: 10px;
+}
+
+.contact-modal-header p {
+    color: var(--text-light);
+    font-size: 1rem;
+    margin: 0;
+}
+
+.contact-modal-body {
+    padding: 30px 40px 40px 40px;
+}
+
+.contact-item {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 30px;
+    padding: 20px;
+    background-color: var(--light-gray);
+    border-radius: 12px;
+    border-left: 4px solid var(--primary-blue);
+    transition: all 0.3s ease;
+    overflow: hidden;
+}
+
+.contact-item:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow);
+    border-left-color: var(--teal);
+}
+
+.contact-item i {
+    font-size: 1.5rem;
+    color: var(--primary-blue);
+    margin-right: 20px;
+    margin-top: 5px;
+    min-width: 24px;
+}
+
+.contact-details {
+    flex: 1;
+}
+
+.contact-details h3 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--text-dark);
+    margin: 0 0 10px 0;
+}
+
+.contact-link {
+    display: inline-block;
+    color: var(--primary-blue);
+    text-decoration: none;
+    font-weight: 500;
+    padding: 8px 16px;
+    border-radius: 12px;
+    transition: all 0.3s ease;
+    margin-bottom: 5px;
+    border: 1px solid transparent;
+}
+
+.contact-link:hover {
+    background-color: var(--primary-blue);
+    color: var(--white);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(26, 35, 126, 0.3);
+}
+
+.email-link:hover {
+    background-color: var(--electric-blue);
+    box-shadow: 0 4px 8px rgba(33, 150, 243, 0.3);
+}
+
+.whatsapp-link:hover {
+    background-color: #25D366;
+    box-shadow: 0 4px 8px rgba(37, 211, 102, 0.3);
+}
+
+.instagram-link:hover {
+    background: linear-gradient(45deg, #f09433 0%,#e6683c 25%,#dc2743 50%,#cc2366 75%,#bc1888 100%);
+    box-shadow: 0 4px 8px rgba(188, 24, 136, 0.3);
+}
+
+.website-link:hover {
+    background-color: var(--teal);
+    box-shadow: 0 4px 8px rgba(38, 166, 154, 0.3);
+}
+
+.phone-numbers {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.contact-description {
+    color: var(--text-light);
+    font-size: 0.9rem;
+    margin: 8px 0 0 0;
+    font-style: italic;
+}
+
+/* Mobile Responsiveness for Contact Modal */
+@media (max-width: 768px) {
+    .contact-modal-content {
+        width: 95%;
+        max-height: 90vh;
+    }
+    
+    .contact-modal-header {
+        padding: 30px 20px 15px 20px;
+    }
+    
+    .contact-modal-header h2 {
+        font-size: 1.5rem;
+    }
+    
+    .contact-modal-body {
+        padding: 20px;
+    }
+    
+    .contact-item {
+        flex-direction: column;
+        text-align: center;
+        padding: 15px;
+    }
+    
+    .contact-item i {
+        margin-right: 0;
+        margin-bottom: 10px;
+    }
+    
+    .phone-numbers {
+        align-items: center;
+    }
+    
+    .contact-link {
+        display: block;
+        text-align: center;
+        margin: 5px 0;
     }
 }
