@@ -213,9 +213,19 @@ body {
 .hero-video-background video {
     width: 100%;
     height: 100%;
-    object-fit: cover; /* fill screen on all devices */
+    object-fit: contain; /* Show full height, crop width if needed */
     position: absolute;
-    top: 0; left: 0;
+    top: 0; 
+    right: 0; /* Align to the right side */
+    left: auto; /* Override left positioning */
+    transition: opacity 0.3s ease;
+}
+
+/* Adjust video positioning for desktop to show full phone */
+@media (min-width: 769px) {
+    .hero-video-background video {
+        object-position: right center; /* Position video content to the right */
+    }
 }
 
 .hero-overlay {
@@ -224,7 +234,7 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    background: linear-gradient(135deg, rgba(26, 35, 126, 0.8) 0%, rgba(38, 166, 154, 0.7) 100%);
+    background: var(--white);
     z-index: -1;
 }
 
@@ -243,18 +253,16 @@ body {
 .hero-title {
     font-size: 3.5rem;
     font-weight: 700;
-    color: white;
+    color: var(--text-dark);
     margin-bottom: 1.5rem;
     line-height: 1.1;
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 .hero-subtitle {
     font-size: 1.25rem;
-    color: rgba(255, 255, 255, 0.9);
+    color: var(--text-light);
     margin-bottom: 2.5rem;
     line-height: 1.6;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
 }
 
 .hero-cta {
@@ -997,6 +1005,37 @@ body {
         text-align: center;
         gap: 1.25rem;
         padding: 0 16px;
+    }
+    
+    /* Mobile layout: video on top, text below */
+    .hero {
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+        padding: 120px 0 80px;
+        justify-content: center;
+    }
+    
+    .hero-video-background {
+        position: relative;
+        height: 45vh;
+        z-index: 1;
+        order: 1;
+    }
+    
+    .hero-container {
+        position: relative;
+        z-index: 2;
+        order: 2;
+        padding: 0 16px;
+    }
+    
+    .hero-video-background video {
+        object-fit: cover;
+        left: 0;
+        right: auto;
+        width: 100%;
+        height: 100%;
     }
     /* Already using cover globally */
     

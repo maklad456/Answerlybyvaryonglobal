@@ -608,7 +608,7 @@ document.addEventListener('DOMContentLoaded', function() {
 // Seamless hero video playlist using double-buffer videos to avoid gap
 (function() {
     const firstSrc = 'media/8eb13f6f-b5e8-4492-a0b3-27c9323a2b1e.mp4';
-    const secondSrc = 'media/video2.mp4';
+    const secondSrc = 'media/7c283dba-abd6-44de-9745-45eae93ce22b.mp4';
     const a = document.getElementById('heroVideoA');
     const b = document.getElementById('heroVideoB');
     if (!a || !b) return;
